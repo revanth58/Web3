@@ -7,6 +7,7 @@ contract EDUTOKEN {
 
     event TokensMinted(address indexed to, uint256 amount);
     event TokensTransferred(address indexed from, address indexed to, uint256 amount);
+    event TokensBurned(address indexed from, uint256 amount);
 
     constructor() {
         owner = msg.sender;
@@ -25,6 +26,13 @@ contract EDUTOKEN {
         balances[msg.sender] -= amount;
         balances[to] += amount;
         emit TokensTransferred(msg.sender, to, amount);
+    }
+
+    // NEW FUNCTION: burn tokens from caller
+    function burn(uint256 amount) public {
+        require(balances[msg.sender] >= amount, "Insufficient balance to burn");
+        balances[msg.sender] -= amount;
+        emit TokensBurned(msg.sender, amount);
     }
 
     // Check if a student is eligible for a reward based on token balance
