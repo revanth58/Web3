@@ -3,11 +3,13 @@ pragma solidity ^0.8.20;
 
 contract EDUTOKEN {
     mapping(address => uint256) public balances;
+    mapping(address => bool) public rewarded; // track who already got a reward
     address public owner;
 
     event TokensMinted(address indexed to, uint256 amount);
     event TokensTransferred(address indexed from, address indexed to, uint256 amount);
     event TokensBurned(address indexed from, uint256 amount);
+    event StudentRewarded(address indexed student, uint256 amount);
 
     constructor() {
         owner = msg.sender;
@@ -28,7 +30,7 @@ contract EDUTOKEN {
         emit TokensTransferred(msg.sender, to, amount);
     }
 
-    // NEW FUNCTION: burn tokens from caller
+    // Burn tokens from caller
     function burn(uint256 amount) public {
         require(balances[msg.sender] >= amount, "Insufficient balance to burn");
         balances[msg.sender] -= amount;
@@ -45,6 +47,15 @@ contract EDUTOKEN {
         } else {
             return "Not eligible";
         }
+    }
+
+    // NEW FUNCTION: reward a student (only once)
+    function rewardStudent(address student, uint256 amount) public {
+        require(msg.sender == owner, "Only owner can reward");
+        require(!rewarded[student], "Student already rewarded");
+        balances[student] += amount;
+        rewarded[student] = true;
+        emit StudentRewarded(student, amount);
     }
 
     // Get total balance of a student
