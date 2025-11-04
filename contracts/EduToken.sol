@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+
 /// @title EDUTOKEN
 /// @notice A minimal education-focused ERC-like token contract with owner-only minting,
 ///         simple transfers, burning, and a one-time student reward mechanism.
