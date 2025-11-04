@@ -6,6 +6,9 @@ contract EDUTOKEN {
     mapping(address => bool) public rewarded; // track who already got a reward
     address public owner;
 
+    uint256 public totalMinted;
+    uint256 public totalBurned;
+
     event TokensMinted(address indexed to, uint256 amount);
     event TokensTransferred(address indexed from, address indexed to, uint256 amount);
     event TokensBurned(address indexed from, uint256 amount);
@@ -19,6 +22,7 @@ contract EDUTOKEN {
     function mint(address to, uint256 amount) public {
         require(msg.sender == owner, "Only owner can mint");
         balances[to] += amount;
+        totalMinted += amount;
         emit TokensMinted(to, amount);
     }
 
@@ -34,6 +38,7 @@ contract EDUTOKEN {
     function burn(uint256 amount) public {
         require(balances[msg.sender] >= amount, "Insufficient balance to burn");
         balances[msg.sender] -= amount;
+        totalBurned += amount;
         emit TokensBurned(msg.sender, amount);
     }
 
@@ -49,11 +54,12 @@ contract EDUTOKEN {
         }
     }
 
-    // NEW FUNCTION: reward a student (only once)
+    // Reward a student (only once)
     function rewardStudent(address student, uint256 amount) public {
         require(msg.sender == owner, "Only owner can reward");
         require(!rewarded[student], "Student already rewarded");
         balances[student] += amount;
+        totalMinted += amount;
         rewarded[student] = true;
         emit StudentRewarded(student, amount);
     }
@@ -61,5 +67,10 @@ contract EDUTOKEN {
     // Get total balance of a student
     function getBalance(address student) public view returns (uint256) {
         return balances[student];
+    }
+
+    // get total supply in the system
+    function totalSupply() public view returns (uint256) {
+        return totalMinted - totalBurned;
     }
 }
