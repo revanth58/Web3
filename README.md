@@ -65,6 +65,9 @@ EduToken aims to **reward learning and participation** on educational platforms 
 5. Start earning EduTokens and testing reward features!
 
 ---
+### Contract address:
+0x4e0cb67a9a0a4be73289fE346fEC483Be7808290
+![alt text](image.png)
 
 ## License
 MIT License
