@@ -71,3 +71,5 @@ EduToken aims to **reward learning and participation** on educational platforms 
 
 ## License
 MIT License
+## License
+MIT License
